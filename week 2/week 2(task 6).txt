@@ -1,0 +1,70 @@
+Given an array of strings strs, group the anagrams together. You can return the answer in any order.
+
+ 
+
+Example 1:
+
+Input: strs = ["eat","tea","tan","ate","nat","bat"]
+
+Output: [["bat"],["nat","tan"],["ate","eat","tea"]]
+
+Explanation:
+
+There is no string in strs that can be rearranged to form "bat".
+The strings "nat" and "tan" are anagrams as they can be rearranged to form each other.
+The strings "ate", "eat", and "tea" are anagrams as they can be rearranged to form each other.
+Example 2:
+
+Input: strs = [""]
+
+Output: [[""]]
+
+Example 3:
+
+Input: strs = ["a"]
+
+Output: [["a"]]
+
+ 
+
+Constraints:
+
+1 <= strs.length <= 104
+0 <= strs[i].length <= 100
+strs[i] consists of lowercase English letters.
+program:
+import java.util.*;
+
+class Solution {
+    public List<List<String>> groupAnagrams(String[] strs) {
+        // Base case check
+        if (strs == null || strs.length == 0) {
+            return new ArrayList<>();
+        }
+        
+        // Map to group anagrams by their sorted character signature
+        Map<String, List<String>> map = new HashMap<>();
+        
+        for (String s : strs) {
+            // Convert to char array and sort to create the unique signature
+            char[] charArray = s.toCharArray();
+            Arrays.sort(charArray);
+            String key = String.valueOf(charArray);
+            
+            // Put the original string into the corresponding list
+            if (!map.containsKey(key)) {
+                map.put(key, new ArrayList<>());
+            }
+            map.get(key).add(s);
+        }
+        
+        // Return all the groups as a list of lists
+        return new ArrayList<>(map.values());
+    }
+}
+OUTPUT:
+Input
+strs =
+["eat","tea","tan","ate","nat","bat"]
+Output
+[["eat","tea","ate"],["bat"],["tan","nat"]]
