@@ -1,0 +1,83 @@
+Given a time in -hour AM/PM format, convert it to military (24-hour) time.
+
+Note: - 12:00:00AM on a 12-hour clock is 00:00:00 on a 24-hour clock.
+- 12:00:00PM on a 12-hour clock is 12:00:00 on a 24-hour clock.
+
+Example
+
+
+Return '12:01:00'.
+
+
+Return '00:01:00'.
+
+Function Description
+
+Complete the  function with the following parameter(s):
+
+: a time in  hour format
+Returns
+
+: the time in  hour format
+Input Format
+
+A single string  that represents a time in -hour clock format (i.e.:  or ).
+
+Constraints
+
+All input times are valid
+Sample Input 0
+
+07:05:45PM
+Sample Output 0
+
+19:05:45
+program:
+import java.io.*;
+import java.util.Optional;
+
+public class Solution {
+    
+    // The core function called by the main method
+    public static String timeConversion(String s) {
+        String ampm = s.substring(s.length() - 2);
+        String remainingTime = s.substring(2, s.length() - 2);
+        int hour = Integer.parseInt(s.substring(0, 2));
+
+        String militaryHour = Optional.of(ampm)
+            .map(marker -> marker.equals("AM") 
+                ? (hour == 12 ? 0 : hour) 
+                : (hour == 12 ? 12 : hour + 12))
+            .map(h -> String.format("%02d", h))
+            .orElse("00");
+
+        return militaryHour + remainingTime;
+    }
+
+    // REQUIRED MAIN METHOD: This is the entry point that resolves your compiler error
+    public static void main(String[] args) throws IOException {
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
+        BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(System.out));
+
+        // Reads the single line input time string
+        String s = bufferedReader.readLine();
+
+        // Computes the conversion result
+        String result = timeConversion(s);
+
+        // Writes the result out to standard output
+        bufferedWriter.write(result);
+        bufferedWriter.newLine();
+
+        // Close streams to free system resources
+        bufferedReader.close();
+        bufferedWriter.close();
+    }
+}
+
+output:
+
+Input 
+07:05:45PM
+Your Output 
+19:05:45
