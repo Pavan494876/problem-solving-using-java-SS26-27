@@ -1,0 +1,140 @@
+Problem Statement
+Design a Payment Processing System using a Java interface and an abstract class.
+Create an interface:
+interface Payment {
+    void pay(double amount);
+}
+Implement this interface using three classes:
+CreditCardPayment 
+UPIPayment 
+NetBankingPayment 
+Each payment method should implement the pay() method.
+Create an abstract class PaymentProcessor containing:
+abstract double processPayment(Payment payment, double amount);
+Create a concrete class 
+OnlinePaymentProcessor that extends PaymentProcessor.
+
+The processing rules are:
+Credit Card: 2% processing fee 
+UPI: 1% processing fee 
+Net Banking: 1.5% processing fee 
+
+The program should calculate the final amount paid, including the processing fee.
+The design should allow a new payment method to be added without modifying the existing PaymentProcessor class.
+
+Input Format
+The first line contains an integer N, representing the number of transactions.
+Each of the next N lines contains:
+paymentType amount
+where:
+1 → Credit Card 
+2 → UPI 
+3 → Net Banking 
+
+Output Format
+For each transaction, print:
+paymentType finalAmount
+program:
+import java.util.Scanner;
+
+// 1. Payment Interface
+interface Payment {
+    void pay(double amount);
+}
+
+// 2. Concrete Payment Implementations
+class CreditCardPayment implements Payment {
+    @Override
+    public void pay(double amount) {
+        // Core payment logic can be placed here if needed
+    }
+}
+
+class UPIPayment implements Payment {
+    @Override
+    public void pay(double amount) {
+        // Core payment logic can be placed here if needed
+    }
+}
+
+class NetBankingPayment implements Payment {
+    @Override
+    public void pay(double amount) {
+        // Core payment logic can be placed here if needed
+    }
+}
+
+// 3. Abstract Payment Processor
+abstract class PaymentProcessor {
+    abstract double processPayment(Payment payment, double amount);
+}
+
+// 4. Concrete Payment Processor implementing the business rules
+class OnlinePaymentProcessor extends PaymentProcessor {
+    @Override
+    double processPayment(Payment payment, double amount) {
+        double feePercent = 0.0;
+        
+        if (payment instanceof CreditCardPayment) {
+            feePercent = 0.02; // 2%
+        } else if (payment instanceof UPIPayment) {
+            feePercent = 0.01; // 1%
+        } else if (payment instanceof NetBankingPayment) {
+            feePercent = 0.015; // 1.5%
+        }
+        
+        double finalAmount = amount + (amount * feePercent);
+        payment.pay(finalAmount);
+        return finalAmount;
+    }
+}
+
+// 5. Main Class to handle Input and Output
+public class Main {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        
+        if (!scanner.hasNextInt()) return;
+        int n = scanner.nextInt();
+        
+        PaymentProcessor processor = new OnlinePaymentProcessor();
+        
+        for (int i = 0; i < n; i++) {
+            int type = scanner.nextInt();
+            double amount = scanner.nextDouble();
+            
+            Payment payment = null;
+            String typeName = "";
+            
+            switch (type) {
+                case 1:
+                    payment = new CreditCardPayment();
+                    typeName = "Credit Card";
+                    break;
+                case 2:
+                    payment = new UPIPayment();
+                    typeName = "UPI";
+                    break;
+                case 3:
+                    payment = new NetBankingPayment();
+                    typeName = "Net Banking";
+                    break;
+                default:
+                    continue;
+            }
+            
+            double finalAmount = processor.processPayment(payment, amount);
+            System.out.printf("%s %.2f\n", typeName, finalAmount);
+        }
+        
+        scanner.close();
+    }
+}
+otput:
+3
+1 1000.00
+2 500.00
+3 2000.00
+Credit Card 1020.00
+UPI 505.00
+Net Banking 2030.00

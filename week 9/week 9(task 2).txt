@@ -1,0 +1,168 @@
+Problem Description
+Design an object-oriented ride sharing system with reusable classes for Driver, Rider, Vehicle, and Trip. Support polymorphic fare calculation for Bike, Auto, and Cab rides. Include exception handling for invalid bookings.
+Input Format
+First line contains integer N.
+Next N lines contain ride type and distance.
+Output Format
+Display fare for each trip.
+Constraints
+1 ≤ N ≤ 10^5
+Sample Input
+3
+Bike 10
+Cab 15
+Auto 8
+Sample Output
+50
+180
+96
+
+import java.util.*;
+
+class InvalidBookingException extends Exception {
+    public InvalidBookingException(String message) {
+        super(message);
+    }
+}
+
+class Vehicle {
+    protected String vehicleNumber;
+
+    Vehicle(String vehicleNumber) {
+        this.vehicleNumber = vehicleNumber;
+    }
+}
+
+class Driver {
+    protected String name;
+    protected Vehicle vehicle;
+
+    Driver(String name, Vehicle vehicle) {
+        this.name = name;
+        this.vehicle = vehicle;
+    }
+}
+
+class Rider {
+    protected String name;
+
+    Rider(String name) {
+        this.name = name;
+    }
+}
+
+// Base Trip class
+abstract class Trip {
+    protected Rider rider;
+    protected Driver driver;
+    protected double distance;
+
+    Trip(Rider rider, Driver driver, double distance) throws InvalidBookingException {
+        if (distance <= 0) {
+            throw new InvalidBookingException("Invalid distance");
+        }
+
+        this.rider = rider;
+        this.driver = driver;
+        this.distance = distance;
+    }
+
+    abstract double calculateFare();
+}
+
+// Bike ride
+class BikeTrip extends Trip {
+
+    BikeTrip(Rider rider, Driver driver, double distance)
+            throws InvalidBookingException {
+        super(rider, driver, distance);
+    }
+
+    @Override
+    double calculateFare() {
+        return distance * 5;
+    }
+}
+
+// Auto ride
+class AutoTrip extends Trip {
+
+    AutoTrip(Rider rider, Driver driver, double distance)
+            throws InvalidBookingException {
+        super(rider, driver, distance);
+    }
+
+    @Override
+    double calculateFare() {
+        return distance * 12;
+    }
+}
+
+// Cab ride
+class CabTrip extends Trip {
+
+    CabTrip(Rider rider, Driver driver, double distance)
+            throws InvalidBookingException {
+        super(rider, driver, distance);
+    }
+
+    @Override
+    double calculateFare() {
+        return distance * 12;
+    }
+}
+
+public class Task6 {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        int n = Integer.parseInt(sc.nextLine().trim());
+
+        Rider rider = new Rider("Rider1");
+
+        for (int i = 0; i < n; i++) {
+            String line = sc.nextLine().trim();
+            String[] parts = line.split("\\s+");
+
+            String rideType = parts[0];
+            double distance = Double.parseDouble(parts[1]);
+
+            try {
+                Vehicle vehicle = new Vehicle("V" + (i + 1));
+                Driver driver = new Driver("Driver" + (i + 1), vehicle);
+
+                Trip trip;
+
+                if (rideType.equalsIgnoreCase("Bike")) {
+                    trip = new BikeTrip(rider, driver, distance);
+                } 
+                else if (rideType.equalsIgnoreCase("Auto")) {
+                    trip = new AutoTrip(rider, driver, distance);
+                } 
+                else if (rideType.equalsIgnoreCase("Cab")) {
+                    trip = new CabTrip(rider, driver, distance);
+                } 
+                else {
+                    throw new InvalidBookingException("Invalid ride type");
+                }
+
+                System.out.println((int) trip.calculateFare());
+
+            } catch (InvalidBookingException e) {
+                System.out.println("Invalid Booking");
+            }
+        }
+
+        sc.close();
+    }
+}
+Sample Input
+3
+Bike 10
+Cab 15
+Auto 8
+Sample Output
+50
+180
+96
+

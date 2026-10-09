@@ -1,0 +1,152 @@
+Problem Statement
+Design a Vehicle Rental System using Java inheritance and runtime polymorphism.
+Create a base class Vehicle with the following attributes:
+vehicleNumber 
+rentPerDay 
+Create three subclasses:
+Car 
+Bike 
+Truck 
+
+Each subclass must override the method:
+double calculateRent(int days)
+
+The rental amount is calculated as follows:
+Car: rentPerDay × days 
+Bike: rentPerDay × days × 0.90 (10% discount) 
+Truck: rentPerDay × days × 1.20 (20% additional charge) 
+
+Input Format:
+
+The first line contains an integer N, representing the number of vehicles.
+Each of the next N lines contains:
+                vehicleType vehicleNumber rentPerDay days
+where:
+vehicleType = 1 → Car 
+vehicleType = 2 → Bike 
+vehicleType = 3 → Truck 
+
+Output Format
+For each vehicle, print:
+              vehicleNumber totalRent
+Round the total rent to two decimal places.
+
+Constraints
+1 ≤ N ≤ 100 
+1 ≤ rentPerDay ≤ 10000 
+1 ≤ days ≤ 365 
+
+
+Sample Input
+3
+1 CAR101 2000 3
+2 BIKE201 500 4
+3 TRUCK301 3000 2
+Sample Output
+CAR101 6000.00
+BIKE201 1800.00
+TRUCK301 7200.00
+import java.util.Scanner;
+
+// Base class Vehicle
+class Vehicle {
+    protected String vehicleNumber;
+    protected double rentPerDay;
+
+    public Vehicle(String vehicleNumber, double rentPerDay) {
+        this.vehicleNumber = vehicleNumber;
+        this.rentPerDay = rentPerDay;
+    }
+
+    // Method to be overridden by subclasses
+    public double calculateRent(int days) {
+        return 0.0;
+    }
+
+    public String getVehicleNumber() {
+        return vehicleNumber;
+    }
+}
+
+// Subclass Car
+class Car extends Vehicle {
+    public Car(String vehicleNumber, double rentPerDay) {
+        super(vehicleNumber, rentPerDay);
+    }
+
+    @Override
+    public double calculateRent(int days) {
+        return rentPerDay * days;
+    }
+}
+
+// Subclass Bike
+class Bike extends Vehicle {
+    public Bike(String vehicleNumber, double rentPerDay) {
+        super(vehicleNumber, rentPerDay);
+    }
+
+    @Override
+    public double calculateRent(int days) {
+        // 10% discount applied
+        return rentPerDay * days * 0.90;
+    }
+}
+
+// Subclass Truck
+class Truck extends Vehicle {
+    public Truck(String vehicleNumber, double rentPerDay) {
+        super(vehicleNumber, rentPerDay);
+    }
+
+    @Override
+    public double calculateRent(int days) {
+        // 20% additional charge applied
+        return rentPerDay * days * 1.20;
+    }
+}
+
+// Main class to handle input and runtime polymorphism
+public class Main {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(String.valueOf(System.in).equals("null") ? "" : System.in);
+        if (!scanner.hasNextInt()) return;
+        
+        int n = scanner.nextInt();
+        Vehicle[] vehicles = new Vehicle[n];
+        int[] rentalDays = new int[n];
+
+        for (int i = 0; i < n; i++) {
+            int type = scanner.nextInt();
+            String vNo = scanner.next();
+            double rent = scanner.nextDouble();
+            rentalDays[i] = scanner.nextInt();
+
+            // Demonstration of Polymorphism
+            if (type == 1) {
+                vehicles[i] = new Car(vNo, rent);
+            } else if (type == 2) {
+                vehicles[i] = new Bike(vNo, rent);
+            } else if (type == 3) {
+                vehicles[i] = new Truck(vNo, rent);
+            }
+        }
+
+        // Output formatting
+        for (int i = 0; i < n; i++) {
+            if (vehicles[i] != null) {
+                double totalRent = vehicles[i].calculateRent(rentalDays[i]);
+                System.out.printf("%s %.2f\n", vehicles[i].getVehicleNumber(), totalRent);
+            }
+        }
+        
+        scanner.close();
+    }
+}
+3
+1 CAR101 2000 3
+2 BIKE201 500 4
+3 TRUCK301 3000 2
+CAR101 6000.00
+BIKE201 1800.00
+TRUCK301 7200.00
