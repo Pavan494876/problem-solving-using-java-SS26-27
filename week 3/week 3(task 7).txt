@@ -1,0 +1,63 @@
+Given a list of non-negative integers nums, arrange them such that they form the largest number and return it.
+
+Since the result may be very large, so you need to return a string instead of an integer.
+
+ 
+
+Example 1:
+
+Input: nums = [10,2]
+Output: "210"
+Example 2:
+
+Input: nums = [3,30,34,5,9]
+Output: "9534330"
+ 
+
+Constraints:
+
+1 <= nums.length <= 100
+0 <= nums[i] <= 109
+program:
+import java.util.Arrays;
+import java.util.Comparator;
+
+class Solution {
+    public String largestNumber(int[] nums) {
+        // Convert integer array to String array
+        String[] asStrs = new String[nums.length];
+        for (int i = 0; i < nums.length; i++) {
+            asStrs[i] = String.valueOf(nums[i]);
+        }
+
+        // Sort using custom comparator logic
+        Arrays.sort(asStrs, new Comparator<String>() {
+            @Override
+            public int compare(String s1, String s2) {
+                String order1 = s1 + s2;
+                String order2 = s2 + s1;
+                // Sort in descending order
+                return order2.compareTo(order1);
+            }
+        });
+
+        // Edge case: If the largest number is "0", the whole number is 0
+        if (asStrs[0].equals("0")) {
+            return "0";
+        }
+
+        // Build the final largest number string
+        StringBuilder largestNumberStr = new StringBuilder();
+        for (String numAsStr : asStrs) {
+            largestNumberStr.append(numAsStr);
+        }
+
+        return largestNumberStr.toString();
+    }
+}
+output:
+Input
+nums =
+[10,2]
+Output
+"210"

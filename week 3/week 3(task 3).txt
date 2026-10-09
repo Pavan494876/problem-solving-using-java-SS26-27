@@ -1,0 +1,57 @@
+Given a string date representing a Gregorian calendar date formatted as YYYY-MM-DD, return the day number of the year.
+
+ 
+
+Example 1:
+
+Input: date = "2019-01-09"
+Output: 9
+Explanation: Given date is the 9th day of the year in 2019.
+Example 2:
+
+Input: date = "2019-02-10"
+Output: 41
+ 
+
+Constraints:
+
+date.length == 10
+date[4] == date[7] == '-', and all other date[i]'s are digits
+date represents a calendar date between Jan 1st, 1900 and Dec 31st, 2019.
+program:
+class Solution {
+    public int dayOfYear(String date) {
+        // Extract year, month, and day from the string segments
+        int year = Integer.parseInt(date.substring(0, 4));
+        int month = Integer.parseInt(date.substring(5, 7));
+        int day = Integer.parseInt(date.substring(8, 10));
+        
+        // Days in each month (index 1 is January, index 2 is February, etc.)
+        int[] daysInMonth = {0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+        
+        // Check for leap year conditions in the Gregorian calendar
+        if (isLeapYear(year)) {
+            daysInMonth[2] = 29; // February has 29 days in a leap year
+        }
+        
+        int dayCount = day;
+        // Sum the days of all previous months in the current year
+        for (int i = 1; i < month; i++) {
+            dayCount += daysInMonth[i];
+        }
+        
+        return dayCount;
+    }
+    
+    private boolean isLeapYear(int year) {
+        // A year is a leap year if it is divisible by 4, 
+        // but not by 100 unless it is also divisible by 400
+        return (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0);
+    }
+}
+output:
+Input
+date =
+"2019-01-09"
+Output
+9
