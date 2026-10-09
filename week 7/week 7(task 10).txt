@@ -1,0 +1,118 @@
+task 10:
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+class ThroneInheritance {
+    private final String king;
+    // Maps a parent's name to the list of their children in birth order
+    private final Map<String, List<String>> familyTree;
+    // Set to keep track of dead family members
+    private final Set<String> deadSet;
+
+    public ThroneInheritance(String kingName) {
+        this.king = kingName;
+        this.familyTree = new HashMap<>();
+        this.deadSet = new HashSet<>();
+        // Initialize the king's entry in the family tree
+        familyTree.put(kingName, new ArrayList<>());
+    }
+    
+    public void birth(String parentName, String childName) {
+        // Append the child to the parent's children list
+        familyTree.get(parentName).add(childName);
+        // Initialize an empty children list for the newborn
+        familyTree.put(childName, new ArrayList<>());
+    }
+    
+    public void death(String name) {
+        // Mark the person as dead
+        deadSet.add(name);
+    }
+    
+    public List<String> getInheritanceOrder() {
+        List<String> order = new ArrayList<>();
+        // Perform pre-order DFS traversal starting from the king
+        dfs(king, order);
+        return order;
+    }
+
+    private void dfs(String currentPerson, List<String> order) {
+        // Pre-order rule: Process the parent before moving to the children
+        if (!deadSet.contains(currentPerson)) {
+            order.add(currentPerson);
+        }
+        
+        // Recursively visit all children in chronological birth order
+        List<String> children = familyTree.get(currentPerson);
+        if (children != null) {
+            for (String child : children) {
+                dfs(child, order);
+            }
+        }
+    }
+}
+program:
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+class ThroneInheritance {
+    private final String king;
+    // Maps a parent's name to the list of their children in birth order
+    private final Map<String, List<String>> familyTree;
+    // Set to keep track of dead family members
+    private final Set<String> deadSet;
+
+    public ThroneInheritance(String kingName) {
+        this.king = kingName;
+        this.familyTree = new HashMap<>();
+        this.deadSet = new HashSet<>();
+        // Initialize the king's entry in the family tree
+        familyTree.put(kingName, new ArrayList<>());
+    }
+    
+    public void birth(String parentName, String childName) {
+        // Append the child to the parent's children list
+        familyTree.get(parentName).add(childName);
+        // Initialize an empty children list for the newborn
+        familyTree.put(childName, new ArrayList<>());
+    }
+    
+    public void death(String name) {
+        // Mark the person as dead
+        deadSet.add(name);
+    }
+    
+    public List<String> getInheritanceOrder() {
+        List<String> order = new ArrayList<>();
+        // Perform pre-order DFS traversal starting from the king
+        dfs(king, order);
+        return order;
+    }
+
+    private void dfs(String currentPerson, List<String> order) {
+        // Pre-order rule: Process the parent before moving to the children
+        if (!deadSet.contains(currentPerson)) {
+            order.add(currentPerson);
+        }
+        
+        // Recursively visit all children in chronological birth order
+        List<String> children = familyTree.get(currentPerson);
+        if (children != null) {
+            for (String child : children) {
+                dfs(child, order);
+            }
+        }
+    }
+}
+
+Input
+["ThroneInheritance","birth","birth","birth","birth","birth","birth","getInheritanceOrder","death","getInheritanceOrder"]
+[["king"],["king","andy"],["king","bob"],["king","catherine"],["andy","matthew"],["bob","alex"],["bob","asha"],[null],["bob"],[null]]
